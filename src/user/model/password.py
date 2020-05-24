@@ -1,7 +1,8 @@
 from passlib.hash import sha256_crypt
 
+
 class Password():
-    
+
     # TODO check if str passed is sha256_crypt
     def __init__(self, password: str):
         self.__value = password

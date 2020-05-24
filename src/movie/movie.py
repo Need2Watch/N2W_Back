@@ -2,8 +2,8 @@
 
 class Movie:
 
-    def __init__(self, movie_id, title, poster_url, rating, 
-                genres, overview, following = False, watched = False):
+    def __init__(self, movie_id, title, poster_url, rating,
+                 genres, overview, following=False, watched=False):
         self.__movie_id = movie_id
         self.__title = title
         self.__poster_url = poster_url
@@ -24,7 +24,7 @@ class Movie:
     @property
     def poster_url(self):
         return self.__poster_url
-    
+
     @property
     def rating(self):
         return self.__rating

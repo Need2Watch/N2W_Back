@@ -2,6 +2,7 @@ import unittest
 from passlib.hash import sha256_crypt
 from ..password import Password
 
+
 class TestPassword(unittest.TestCase):
 
     def test_constructor(self):

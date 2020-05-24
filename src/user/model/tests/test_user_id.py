@@ -4,6 +4,7 @@ import uuid
 from uuid import UUID
 from ..user_id import UserId
 
+
 class TestUserId(unittest.TestCase):
 
     def test_constructor(self):

@@ -3,10 +3,11 @@ from hashlib import md5
 from .user_id import UserId
 from .password import Password
 
+
 class User:
 
-    def __init__(self, user_id: UserId, username, password: Password, first_name, last_name, 
-                email, country, city, favourite_genres):
+    def __init__(self, user_id: UserId, username, password: Password, first_name, last_name,
+                 email, country, city, favourite_genres):
         self.__user_id: UserId = user_id
         self.__username = username
         self.__password: Password = password
@@ -17,33 +18,32 @@ class User:
         self.__city = city
         self.__favourite_genres = favourite_genres
 
-
     @staticmethod
     def from_json(user_json):
         user_dict = json.loads(user_json)
         return User(
-            user_id = UserId.from_string(user_dict['user_id']),
-            username = user_dict['username'],
-            password = user_dict['password'],
-            first_name = user_dict['first_name'],
-            last_name = user_dict['last_name'],
-            email = user_dict['email'],
-            country = user_dict['country'],
-            city = user_dict['city'],
-            favourite_genres = user_dict['first_name']
+            user_id=UserId.from_string(user_dict['user_id']),
+            username=user_dict['username'],
+            password=user_dict['password'],
+            first_name=user_dict['first_name'],
+            last_name=user_dict['last_name'],
+            email=user_dict['email'],
+            country=user_dict['country'],
+            city=user_dict['city'],
+            favourite_genres=user_dict['first_name']
         )
 
     def to_json(self):
         user_dict = {
-            'user_id' : str(self.__user_id.value),
-            'username' : self.__username,
-            'password' : self.__password,
-            'first_name' : self.__first_name,
-            'last_name' : self.__last_name,
-            'email' : self.__email,
-            'country' : self.__country,
-            'city' : self.__city,
-            'favourite_genres' : self.__favourite_genres
+            'user_id': str(self.__user_id.value),
+            'username': self.__username,
+            'password': self.__password,
+            'first_name': self.__first_name,
+            'last_name': self.__last_name,
+            'email': self.__email,
+            'country': self.__country,
+            'city': self.__city,
+            'favourite_genres': self.__favourite_genres
         }
 
         user_json = json.dumps(user_dict)
@@ -72,7 +72,7 @@ class User:
     @property
     def email(self):
         return self.__email
-    
+
     @property
     def country(self):
         return self.__country
