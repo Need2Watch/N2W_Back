@@ -2,8 +2,11 @@ import os
 
 from flask import Flask
 from tmdbv3api import TMDb
+import sqlalchemy as db
 
 from config import config
+
+
 
 
 def create_app(environment):
@@ -19,6 +22,10 @@ def create_movie_api():
     tmdb.debug = True
     return tmdb
 
+
+db_engine = db.create_engine(os.environ['DB_ENGINE'])
+db_conection = self.__engine.connect()
+db_metadata = db.MetaData()
 
 environment = config['development']
 
