@@ -2,13 +2,13 @@ from flask import Flask
 from config import config
 
 
-def create_app(enviroment):
+def create_app(environment):
     app = Flask(__name__)
 
-    app.config.from_object(enviroment)
+    app.config.from_object(environment)
 
     return app
 
 
-enviroment = config['development']
-app = create_app(enviroment)
+environment = config['development']
+app = create_app(environment)
