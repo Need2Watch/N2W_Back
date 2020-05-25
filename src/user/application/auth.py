@@ -20,7 +20,7 @@ def new_user():
 
     email = request.json.get('email')
     if user_repository.getByEmail(email):
-        abort(400)
+        abort(409)
 
     user = FromDictToUser.with_dict(request.json)
     user_repository.add(user)
