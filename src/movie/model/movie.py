@@ -1,5 +1,4 @@
 
-
 class Movie:
 
     def __init__(self, movie_id, title, poster_url, rating,

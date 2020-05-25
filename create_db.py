@@ -10,12 +10,12 @@ connection = engine.connect()
 metadata = db.MetaData()
 
 def remove_existing_tables():
-    sql = 'DROP TABLE IF EXISTS users;'
+    sql = 'DROP TABLE IF EXISTS users;DROP TABLE IF EXISTS watched_movies;DROP TABLE IF EXISTS followed_movies;'
     result = engine.execute(sql)
 
 def create_user_table():
     users = db.Table('users', metadata,
-                db.Column('user_id', db.String(36), nullable=False),
+                db.Column('user_id', db.String(36), nullable=False, primary_key=True),
                 db.Column('username', db.String(255), nullable=False),
                 db.Column('password', db.String(255), nullable=False),
                 db.Column('first_name', db.String(255), nullable=False),
@@ -25,8 +25,21 @@ def create_user_table():
                 db.Column('city', db.String(255), nullable=False),
             )
 
+def create_following_movies_table():
+    followed_movies = db.Table('followed_movies', metadata,
+                db.Column('user_id', db.String(36), nullable=False, primary_key=True),
+                db.Column('movie_id', db.Integer(), nullable=False, primary_key=True)
+            )
+
+def create_watched_movies_table():
+    watched_movies = db.Table('watched_movies', metadata,
+                db.Column('user_id', db.String(36), nullable=False, primary_key=True),
+                db.Column('movie_id', db.Integer(), nullable=False, primary_key=True)
+            )
 
 if __name__ == "__main__":
     remove_existing_tables()
     create_user_table()
+    create_watched_movies_table()
+    create_following_movies_table()
     metadata.create_all(engine)
