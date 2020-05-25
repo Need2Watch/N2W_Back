@@ -8,6 +8,9 @@ from tmdbv3api import Movie as ApiMovies
 import sqlalchemy as db
 from sqlalchemy import and_
 import uuid
+from dotenv import load_dotenv
+
+load_dotenv()
 
 import os
 
@@ -18,7 +21,7 @@ class MovieRepository:
 
     def __init__(self):
         self.__tmdb = TMDb()
-        self.__tmdb.api_key = os.environ['MOVIE_API_KEY']
+        self.__tmdb.api_key = os.getenv('MOVIE_API_KEY')
         self.__tmdb.language = 'en'
         self.__tmdb.debug = True
         self.__movie = ApiMovies()
@@ -58,9 +61,8 @@ class MovieRepository:
 
     def __is_following(self, movie_id: int, user_id: UserId):
         query = db.select([self.__followed_movies]).where(
-                    and_(self.__followed_movies.columns.user_id == user_id, 
-                        self.__followed_movies.columns.movie_id == movie_id
-                        ) 
+                    and_(self.__followed_movies.columns.user_id == user_id,
+                        self.__followed_movies.columns.movie_id == movie_id)
                 )
         resultProxy = db_connection.execute(query)
         resultSet = resultProxy.fetchall()
@@ -70,9 +72,9 @@ class MovieRepository:
 
     def __has_watched(self, movie_id: int, user_id: UserId):
         query = db.select([self.__watched_movies]).where(
-                    and_(self.__watched_movies.columns.user_id == user_id, 
+                    and_(self.__watched_movies.columns.user_id == user_id,
                         self.__watched_movies.columns.movie_id == movie_id
-                        ) 
+                        )
                 )
         resultProxy = db_connection.execute(query)
         resultSet = resultProxy.fetchall()
