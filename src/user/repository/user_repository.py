@@ -53,12 +53,12 @@ class UserRepository:
 
     def __getUserFromResult(self, result: tuple):
         return User(
-            user_id=UserId.fromString(result[0]),
+            user_id=UserId.from_string(result[0]),
             username=result[1],
-            first_name=result[2],
-            last_name=result[3],
-            password=Password(result[4]),
+            password=Password(result[2]),
+            first_name=result[3],
+            last_name=result[4],
             email=result[5],
             country=result[6],
-            city=result[8]
+            city=result[7]
         )
