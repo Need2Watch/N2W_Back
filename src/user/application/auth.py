@@ -11,8 +11,7 @@ from .service.user_validator import UserValidator
 users = Blueprint("users", __name__, url_prefix="/users")
 
 
-
-@users.route('/', methods=["POST"])
+@users.route('', methods=["POST"])
 def new_user():
     user_repository = UserRepository()
 
@@ -26,7 +25,7 @@ def new_user():
     user = FromDictToUser.with_dict(request.json)
     user_repository.add(user)
 
-    return 200
+    return '200'
 
 
 @users.route('/', methods=["GET"])
