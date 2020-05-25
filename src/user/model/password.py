@@ -8,8 +8,8 @@ class Password():
         self.__value = password
 
     @staticmethod
-    def fromString(password: str):
-        return Password(sha256_crypt.encrypt(password))
+    def from_string(password: str):
+        return Password(sha256_crypt.hash(password))
 
     @property
     def value(self):
