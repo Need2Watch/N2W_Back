@@ -13,6 +13,10 @@ config = {
     'development': DevelopmentConfig
 }
 
+
+
+
+
 db_engine = db.create_engine(os.environ['DB_ENGINE']) 
 db_connection = db_engine.connect()
 db_metadata = db.MetaData()
