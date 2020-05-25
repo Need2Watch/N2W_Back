@@ -19,14 +19,18 @@
   ],
   "tags": [
     {
-      "name": "User Request",
-      "description": "Example API for requesting and return users"
+      "name": "User",
+      "description": "REST API for requesting and returning users"
+    },
+    {
+      "name": "Movie",
+      "description": "REST API for requesting and returning movies"
     }
   ],
   "paths": {
     "/users": {
       "post": {
-        "tags": ["User Request"],
+        "tags": ["User"],
         "summary": "Creates a new user",
         "requestBody": {
           "description": "User Scheme",
@@ -42,10 +46,40 @@
         "produces": ["application/json"],
         "responses": {
           "201": {
-            "description": "OK"
+            "description": "Ok"
           },
           "400": {
-            "description": "Bad syntax or existing user"
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns the movie with the given id",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Movie ID from TheMovieDatabase API",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
           }
         }
       }
@@ -56,13 +90,15 @@
       "user": {
         "properties": {
           "user_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "username": {
             "type": "string"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "format": "password"
           },
           "first_name": {
             "type": "string"
@@ -78,6 +114,38 @@
           },
           "city": {
             "type": "string"
+          }
+        }
+      },
+      "movie": {
+        "properties": {
+          "movie_id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "poster_url": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "overview": {
+            "type": "string"
+          },
+          "following": {
+            "type": "boolean"
+          },
+          "watched": {
+            "type": "boolean"
           }
         }
       }
