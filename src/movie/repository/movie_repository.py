@@ -3,7 +3,8 @@ from ...user.model.user_id import UserId
 
 from ....config import db_engine, db_metadata, db_connection
 
-from tmdbv3api import TMDb, Movie
+from tmdbv3api import TMDb
+from tmdbv3api import Movie as ApiMovies
 import sqlalchemy as db
 from sqlalchemy import and_
 import uuid
@@ -20,7 +21,7 @@ class MovieRepository:
         self.__tmdb.api_key = os.environ['MOVIE_API_KEY']
         self.__tmdb.language = 'en'
         self.__tmdb.debug = True
-        self.__movie = Movie()
+        self.__movie = ApiMovies()
         self.__followed_movies = db.Table("followed_movies", db_metadata,
                                 autoload=True, autoload_with=db_engine)
         self.__watched_movies = db.Table("watched_movies", db_metadata,
@@ -42,15 +43,17 @@ class MovieRepository:
         return self.__getMovieFromApiResult(movie_from_api)
 
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
+        following = self.__is_following(result.id, user_id) if user_id else False
+        watched = self.__has_watched(result.id, user_id) if user_id else False
         return Movie(
             movie_id = result.id,
             title = result.title,
-            poster_url = POSTER_URL + result.porter_path,
+            poster_url = POSTER_URL + result.poster_path,
             rating = result.vote_average,
-            genres = map(lambda genre: genre["name"], result.genres),
+            genres = list(map(lambda genre: genre["name"], result.genres)),
             overview = result.overview,
-            following = __is_following(result.id, user_id) if user_id else False,
-            watched = __has_watched(result.id, user_id) if user_id else False
+            following = following,
+            watched = watched
         )
 
     def __is_following(self, movie_id: int, user_id: UserId):
