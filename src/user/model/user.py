@@ -6,8 +6,8 @@ from .password import Password
 
 class User:
 
-    def __init__(self, user_id: UserId, username, password: Password, first_name, last_name,
-                 email, country, city, favourite_genres):
+    def __init__(self, user_id: UserId, username, password, first_name, last_name,
+                 email, country, city):
         self.__user_id: UserId = user_id
         self.__username = username
         self.__password: Password = password
@@ -16,38 +16,7 @@ class User:
         self.__email = email
         self.__country = country
         self.__city = city
-        self.__favourite_genres = favourite_genres
 
-    @staticmethod
-    def from_json(user_json):
-        user_dict = json.loads(user_json)
-        return User(
-            user_id=UserId.from_string(user_dict['user_id']),
-            username=user_dict['username'],
-            password=user_dict['password'],
-            first_name=user_dict['first_name'],
-            last_name=user_dict['last_name'],
-            email=user_dict['email'],
-            country=user_dict['country'],
-            city=user_dict['city'],
-            favourite_genres=user_dict['first_name']
-        )
-
-    def to_json(self):
-        user_dict = {
-            'user_id': str(self.__user_id.value),
-            'username': self.__username,
-            'password': self.__password,
-            'first_name': self.__first_name,
-            'last_name': self.__last_name,
-            'email': self.__email,
-            'country': self.__country,
-            'city': self.__city,
-            'favourite_genres': self.__favourite_genres
-        }
-
-        user_json = json.dumps(user_dict)
-        return user_json
 
     @property
     def user_id(self):
@@ -80,10 +49,6 @@ class User:
     @property
     def city(self):
         return self.__city
-
-    @property
-    def favourite_genres(self):
-        return self.__favourite_genres
 
     @property
     def profile_picture(self, size):

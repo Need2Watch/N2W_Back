@@ -2,7 +2,7 @@ from ..model.user import User
 from ..model.user_id import UserId
 from ..model.password import Password
 
-from ....n2w import db_engine, db_metadata, db_connection
+from ....config import db_engine, db_metadata, db_connection
 
 from uuid import UUID
 import sqlalchemy as db
@@ -18,7 +18,7 @@ class UserRepository:
         query = db.insert(self.__users).values(user_id=user.user_id, username=user.username,
                                                password=user.password, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
-                                               city=user.city, favourite_genres=user.favourite_genres)
+                                               city=user.city)
         resultProxy = db_connection.execute(query)
 
     def delete(self, user: User):
@@ -30,7 +30,7 @@ class UserRepository:
         query = db.update(self.__users).values(user_id=user.user_id, username=user.username,
                                                password=user.password, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
-                                               city=user.city, favourite_genres=user.favourite_genres)
+                                               city=user.city)
         resultProxy = db_connection.execute(query)
 
     def getById(self, user_id: UUID):
@@ -60,6 +60,5 @@ class UserRepository:
             password=Password(result[4]),
             email=result[5],
             country=result[6],
-            city=result[8],
-            favourite_genres=result[9]
+            city=result[8]
         )
