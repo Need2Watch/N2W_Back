@@ -57,6 +57,35 @@
         }
       }
     },
+    "/auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login an user",
+        "requestBody": {
+          "description": "Login Scheme",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
+    },
     "/movies/{id}": {
       "get": {
         "tags": ["Movie"],
@@ -163,6 +192,17 @@
   },
   "components": {
     "schemas": {
+      "login": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
       "user": {
         "properties": {
           "user_id": {
