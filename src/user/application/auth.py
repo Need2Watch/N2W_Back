@@ -22,7 +22,7 @@ def login():
 
     user = user_repository.getByEmail(email)
     if not user:
-        abort(403)
+        abort(404)
 
     if not user.verifyPassword(password):
         abort(403)
