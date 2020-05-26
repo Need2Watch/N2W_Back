@@ -59,13 +59,27 @@ class MovieRepository:
             movies.append(self.__getMovieFromApiResult(movie, user_id))
         return movies
 
+    def getByTitle(self, title: str, user_id: UserId = None):
+        movies_from_api = self.__movie.search(title)
+        if not movies_from_api:
+            return None
+        movies = []
+        for movie_from_api in movies_from_api:
+            # Some details (as genres) are not included when makeng the search query
+            # So we have to make details query for each movie
+            movie = self.__movie.details(movie_from_api.id)
+            movies.append(self.__getMovieFromApiResult(movie, user_id))
+        return movies
+
+
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
         following = self.__is_following(result.id, user_id) if user_id else False
         watched = self.__has_watched(result.id, user_id) if user_id else False
+        poster = (POSTER_URL + result.poster_path) if result.poster_path else ""
         return Movie(
             movie_id = result.id,
             title = result.title,
-            poster_url = POSTER_URL + result.poster_path,
+            poster_url = poster,
             rating = result.vote_average,
             genres = list(map(lambda genre: genre["name"], result.genres)),
             overview = result.overview,

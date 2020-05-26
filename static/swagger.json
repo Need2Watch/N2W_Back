@@ -103,6 +103,35 @@
           }
         }
       }
+    },
+    "/movies/search": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Searches for a movie by the name",
+        "requestBody": {
+          "description": "Movie Name",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/movie"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
     }
   },
   "components": {

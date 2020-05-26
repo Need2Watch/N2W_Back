@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import abort
 from flask import jsonify
+from flask import request
 
 from ..repository.movie_repository import MovieRepository
 from .service.from_movie_to_dict import FromMovieToDict
@@ -19,12 +20,23 @@ def get_movie(movie_id: int):
     return jsonify(FromMovieToDict.with_movie(movie))
 
 
-
 @movies.route('/popular', methods=["GET"])
 def get_popular_movies():
     movie_repository = MovieRepository()
 
     movies = movie_repository.getPopularMovies()
+    if not movies:
+        abort(404)
+
+    return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
+
+
+@movies.route('/search', methods=["POST"])
+def search_movie():
+    movie_repository = MovieRepository()
+
+    title = request.json.get('title')
+    movies = movie_repository.getByTitle(title)
     if not movies:
         abort(404)
 
