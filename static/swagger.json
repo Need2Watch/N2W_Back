@@ -136,6 +136,62 @@
           }
         }
       }
+    },
+    "/movies/similar/{id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns similar movies to the one with the given id",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Movie ID from TheMovieDatabase API",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    },
+    "/movies/search": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Searches for a movie by the name",
+        "requestBody": {
+          "description": "Movie Name",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/movie"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
     }
   },
   "components": {
