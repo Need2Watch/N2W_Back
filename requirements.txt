@@ -5,6 +5,7 @@ chardet==3.0.4
 click==7.1.2
 Faker==4.1.0
 Flask==1.1.2
+Flask-Cors==3.0.8
 flask-swagger-ui==3.25.0
 idna==2.9
 importlib-metadata==1.6.0
