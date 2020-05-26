@@ -43,7 +43,6 @@
             }
           }
         },
-        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Ok"
@@ -86,14 +85,14 @@
         }
       }
     },
-    "/movies/{id}": {
+    "/movies/{movie_id}": {
       "get": {
         "tags": ["Movie"],
         "summary": "Returns the movie with the given id",
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "id",
+            "name": "movie_id",
             "in": "path",
             "description": "Movie ID from TheMovieDatabase API",
             "required": true,
@@ -118,8 +117,7 @@
         "tags": ["Movie"],
         "summary": "Returns popular movies of the moment",
         "produces": ["application/json"],
-        "parameters": [
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Ok",
