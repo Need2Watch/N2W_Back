@@ -7,7 +7,8 @@ from flask import jsonify
 from ..repository.user_repository import UserRepository
 from .service.from_dict_to_user import FromDictToUser
 from .service.user_validator import UserValidator
-from src.user.application.service.from_user_to_dict import FromUserToDict
+from .service.from_user_to_dict import FromUserToDict
+from ..model.user_id import UserId
 
 users = Blueprint("users", __name__, url_prefix="/users")
 
@@ -35,6 +36,9 @@ def user_update(user_id: str):
 
     if not UserValidator().validate_user(request.json):
         abort(400)
+
+    if user_repository.getById(UserId.from_string(user_id)):
+        abort(404)
 
     user = FromDictToUser.with_dict(request.json)
     user_repository.update(user)

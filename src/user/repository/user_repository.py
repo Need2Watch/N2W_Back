@@ -30,7 +30,7 @@ class UserRepository:
         query = db.update(self.__users).values(user_id=user.user_id, username=user.username,
                                                password=user.password, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
-                                               city=user.city)
+                                               city=user.city).where(self.__users.columns.user_id == user.user_id)
         resultProxy = db_connection.execute(query)
 
     def getById(self, user_id: UUID):
