@@ -71,6 +71,23 @@ class MovieRepository:
             movies.append(self.__getMovieFromApiResult(movie, user_id))
         return movies
 
+    def getSimilarById(self, movie_id: int, user_id: UserId = None):
+        # Whe the movie_id is a 404 in the api tmdbv3api returns an error
+        # So we have to force the 404 in that case
+        try:
+            movies_from_api = self.__movie.similar(movie_id)
+        except Exception as e:
+            return None
+
+        if not movies_from_api:
+            return None
+        movies = []
+        for movie_from_api in movies_from_api:
+            # Some details (as genres) are not included when makeng the simmilar query
+            # So we have to make details query for each movie
+            movie = self.__movie.details(movie_from_api.id)
+            movies.append(self.__getMovieFromApiResult(movie, user_id))
+        return movies
 
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
         following = self.__is_following(result.id, user_id) if user_id else False

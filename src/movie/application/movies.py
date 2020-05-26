@@ -31,6 +31,17 @@ def get_popular_movies():
     return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
 
 
+@movies.route('/similar/<int:movie_id>', methods=["GET"])
+def get_similar_movies(movie_id: int):
+    movie_repository = MovieRepository()
+
+    movies = movie_repository.getSimilarById(movie_id)
+    if not movies:
+        abort(404)
+
+    return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
+
+
 @movies.route('/search', methods=["POST"])
 def search_movie():
     movie_repository = MovieRepository()

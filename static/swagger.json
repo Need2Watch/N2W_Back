@@ -104,6 +104,33 @@
         }
       }
     },
+    "/movies/similar/{id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns similar movies to the one with the given id",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Movie ID from TheMovieDatabase API",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    },
     "/movies/search": {
       "post": {
         "tags": ["Movie"],
