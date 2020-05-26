@@ -41,7 +41,10 @@ class MovieRepository:
 
     def getById(self, movie_id: int, user_id: UserId = None):
         movie_from_api = self.__movie.details(movie_id)
-        if not movie_from_api:
+
+        # There are cases where the api returns an object without properties
+        # We need to return None in those cases too
+        if not movie_from_api or not hasattr(movie_from_api, 'id'):
             return None
         return self.__getMovieFromApiResult(movie_from_api)
 
