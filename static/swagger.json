@@ -31,7 +31,7 @@
     "/users": {
       "post": {
         "tags": ["User"],
-        "summary": "Creates a new user",
+        "summary": "Updates an existing user",
         "requestBody": {
           "description": "User Scheme",
           "required": true,
@@ -45,7 +45,59 @@
         },
         "responses": {
           "201": {
-            "description": "Ok"
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "404": {
+            "description": "Inexistent User"
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Creates a new user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "requestBody": {
+          "description": "User Scheme",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad syntax"
@@ -71,16 +123,22 @@
             }
           }
         },
-        "produces": ["application/json"],
         "responses": {
           "201": {
-            "description": "Ok"
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
           },
-          "400": {
-            "description": "Bad syntax"
+          "404": {
+            "description": "User not found"
           },
-          "409": {
-            "description": "Already existing user"
+          "403": {
+            "description": "Incorrect password"
           }
         }
       }
@@ -89,7 +147,6 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns the movie with the given id",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "movie_id",
@@ -102,8 +159,12 @@
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/movie"
+                }
+              }
             }
           },
           "404": {
@@ -116,7 +177,6 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns the movie with the given id and for the given user",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "movie_id",
@@ -130,14 +190,19 @@
             "in": "path",
             "description": "User ID",
             "required": true,
-            "type": "uuid"
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/movie"
+                }
+              }
             }
           },
           "404": {
@@ -150,13 +215,21 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns popular movies of the moment",
-        "produces": ["application/json"],
         "parameters": [],
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
             }
           },
           "404": {
@@ -169,21 +242,30 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns popular movies of the moment for the given user",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
             "description": "User ID",
             "required": true,
-            "type": "uuid"
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
             }
           },
           "404": {
@@ -196,7 +278,6 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns similar movies to the one with the given id",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "id",
@@ -209,12 +290,21 @@
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
             }
           },
           "404": {
-            "description": "Movie not found"
+            "description": "Movies not found"
           }
         }
       }
@@ -223,7 +313,6 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns similar movies to the one with the given id for the given user",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "movie_id",
@@ -237,18 +326,28 @@
             "in": "path",
             "description": "User ID",
             "required": true,
-            "type": "uuid"
+            "type": "string",
+            "format": "uuid"
           }
         ],
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
             }
           },
           "404": {
-            "description": "Movie not found"
+            "description": "Movies not found"
           }
         }
       }
@@ -257,7 +356,6 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns the followed movies by the user of the given id",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "user_id",
@@ -271,8 +369,17 @@
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
             }
           },
           "404": {
@@ -285,7 +392,6 @@
       "get": {
         "tags": ["Movie"],
         "summary": "Returns the watched movies by the user of the given id",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "user_id",
@@ -299,8 +405,17 @@
         "responses": {
           "200": {
             "description": "Ok",
-            "schema": {
-              "$ref": "#/components/schemas/movie"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
             }
           },
           "404": {
@@ -324,13 +439,24 @@
             }
           }
         },
-        "produces": ["application/json"],
         "responses": {
           "201": {
-            "description": "Ok"
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
+            }
           },
-          "400": {
-            "description": "Bad syntax"
+          "404": {
+            "description": "Movies not found"
           },
           "409": {
             "description": "Already existing user"
@@ -348,21 +474,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/follow"
+                "$ref": "#/components/schemas/movie-user"
               }
             }
           }
         },
         "produces": ["application/json"],
         "responses": {
-          "201": {
+          "200": {
             "description": "Ok"
-          },
-          "400": {
-            "description": "Bad syntax"
-          },
-          "409": {
-            "description": "Already existing user"
           }
         }
       }
@@ -377,21 +497,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/follow"
+                "$ref": "#/components/schemas/movie-user"
               }
             }
           }
         },
         "produces": ["application/json"],
         "responses": {
-          "201": {
+          "200": {
             "description": "Ok"
-          },
-          "400": {
-            "description": "Bad syntax"
-          },
-          "409": {
-            "description": "Already existing user"
           }
         }
       }
@@ -406,21 +520,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/follow"
+                "$ref": "#/components/schemas/movie-user"
               }
             }
           }
         },
         "produces": ["application/json"],
         "responses": {
-          "201": {
+          "200": {
             "description": "Ok"
-          },
-          "400": {
-            "description": "Bad syntax"
-          },
-          "409": {
-            "description": "Already existing user"
           }
         }
       }
@@ -435,21 +543,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/follow"
+                "$ref": "#/components/schemas/movie-user"
               }
             }
           }
         },
         "produces": ["application/json"],
         "responses": {
-          "201": {
+          "200": {
             "description": "Ok"
-          },
-          "400": {
-            "description": "Bad syntax"
-          },
-          "409": {
-            "description": "Already existing user"
           }
         }
       }
@@ -541,7 +643,7 @@
           }
         }
       },
-      "follow": {
+      "movie-user": {
         "properties": {
           "user_id": {
             "type": "string",
