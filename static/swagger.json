@@ -112,12 +112,73 @@
         }
       }
     },
+    "/movies/{movie_id}/{user_id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns the movie with the given id and for the given user",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "Movie ID from TheMovieDatabase API",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    },
     "/movies/popular": {
       "get": {
         "tags": ["Movie"],
         "summary": "Returns popular movies of the moment",
         "produces": ["application/json"],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movies not found"
+          }
+        }
+      }
+    },
+    "/movies/popular/{user_id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns popular movies of the moment for the given user",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "uuid"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Ok",
@@ -158,17 +219,167 @@
         }
       }
     },
+    "/movies/similar/{movie_id}/{user_id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns similar movies to the one with the given id for the given user",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "movie_id",
+            "in": "path",
+            "description": "Movie ID from TheMovieDatabase API",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    },
     "/movies/search": {
       "post": {
         "tags": ["Movie"],
         "summary": "Searches for a movie by the name",
         "requestBody": {
-          "description": "Movie Name",
+          "description": "Movie Name and user",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/movie"
+                "$ref": "#/components/schemas/search"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
+    },
+    "/movies/follow": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Follows a movie",
+        "requestBody": {
+          "description": "Movie Id and user Id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/follow"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
+    },
+    "/movies/unfollow": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Unfollows a movie",
+        "requestBody": {
+          "description": "Movie Id and user Id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/follow"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
+    },
+    "/movies/watch": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Watchs a movie",
+        "requestBody": {
+          "description": "Movie id and user Id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/follow"
+              }
+            }
+          }
+        },
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          },
+          "409": {
+            "description": "Already existing user"
+          }
+        }
+      }
+    },
+    "/movies/unwatch": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Unwatchs a movie",
+        "requestBody": {
+          "description": "Movie id and user Id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/follow"
               }
             }
           }
@@ -260,6 +471,28 @@
           },
           "watched": {
             "type": "boolean"
+          }
+        }
+      },
+      "search": {
+        "properties": {
+          "title": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "follow": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "movie_id": {
+            "type": "integer"
           }
         }
       }

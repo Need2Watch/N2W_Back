@@ -89,6 +89,40 @@ class MovieRepository:
             movies.append(self.__getMovieFromApiResult(movie, user_id))
         return movies
 
+    def follow_movie(self, user_id: UserId, movie_id: int):
+        if self.__is_following(movie_id, user_id):
+            return False
+        query = db.insert(self.__followed_movies).values(user_id=user_id.value, movie_id=movie_id)
+        resultProxy = db_connection.execute(query)
+
+
+    def unfollow_movie(self, user_id: UserId, movie_id: int):
+        if not self.__is_following(movie_id, user_id):
+            return False
+        query = db.delete(self.__followed_movies).where(                                
+                                    and_(self.__followed_movies.columns.user_id == user_id.value,
+                                    self.__followed_movies.columns.movie_id == movie_id)
+                        )
+        resultProxy = db_connection.execute(query)
+
+
+    def watch_movie(self, user_id: UserId, movie_id: int):
+        if self.__has_watched(movie_id, user_id):
+            return False
+        query = db.insert(self.__watched_movies).values(user_id=user_id.value, movie_id=movie_id)
+        resultProxy = db_connection.execute(query)
+
+
+    def unwatch_movie(self, user_id: UserId, movie_id: int):
+        if not self.__has_watched(movie_id, user_id):
+            return False
+        query = db.delete(self.__watched_movies).where(
+                                and_(self.__followed_movies.columns.user_id == user_id.value,
+                                    self.__followed_movies.columns.movie_id == movie_id)
+                        )
+        resultProxy = db_connection.execute(query)
+
+
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
         following = self.__is_following(result.id, user_id) if user_id else False
         watched = self.__has_watched(result.id, user_id) if user_id else False
@@ -106,7 +140,7 @@ class MovieRepository:
 
     def __is_following(self, movie_id: int, user_id: UserId):
         query = db.select([self.__followed_movies]).where(
-                    and_(self.__followed_movies.columns.user_id == user_id,
+                    and_(self.__followed_movies.columns.user_id == user_id.value,
                         self.__followed_movies.columns.movie_id == movie_id)
                 )
         resultProxy = db_connection.execute(query)
@@ -117,7 +151,7 @@ class MovieRepository:
 
     def __has_watched(self, movie_id: int, user_id: UserId):
         query = db.select([self.__watched_movies]).where(
-                    and_(self.__watched_movies.columns.user_id == user_id,
+                    and_(self.__watched_movies.columns.user_id == user_id.value,
                         self.__watched_movies.columns.movie_id == movie_id
                         )
                 )
