@@ -43,7 +43,6 @@
             }
           }
         },
-        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Ok"
@@ -57,14 +56,49 @@
         }
       }
     },
-    "/movies/{id}": {
+    "/users/{user_id}": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Creates a new user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID from TheMovieDatabase API",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "requestBody": {
+          "description": "User Scheme",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad syntax"
+          }
+        }
+      }
+    },
+    "/movies/{movie_id}": {
       "get": {
         "tags": ["Movie"],
         "summary": "Returns the movie with the given id",
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "id",
+            "name": "movie_id",
             "in": "path",
             "description": "Movie ID from TheMovieDatabase API",
             "required": true,
@@ -89,8 +123,7 @@
         "tags": ["Movie"],
         "summary": "Returns popular movies of the moment",
         "produces": ["application/json"],
-        "parameters": [
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Ok",

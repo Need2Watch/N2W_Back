@@ -28,6 +28,14 @@ def new_user():
     return '200'
 
 
-@users.route('/', methods=["GET"])
-def get_user():
-    return jsonify({"Hola": "Hola"})
+@users.route('/<string:user_id>', methods=["PUT"])
+def user_update(user_id: str):
+    user_repository = UserRepository()
+
+    if not UserValidator().validate_user(request.json):
+        abort(400)
+
+    user = FromDictToUser.with_dict(request.json)
+    user_repository.update(user)
+
+    return '200'
