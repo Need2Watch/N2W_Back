@@ -41,12 +41,23 @@ class MovieRepository:
 
     def getById(self, movie_id: int, user_id: UserId = None):
         movie_from_api = self.__movie.details(movie_id)
-
         # There are cases where the api returns an object without properties
         # We need to return None in those cases too
         if not movie_from_api or not hasattr(movie_from_api, 'id'):
             return None
-        return self.__getMovieFromApiResult(movie_from_api)
+        return self.__getMovieFromApiResult(movie_from_api, user_id)
+
+    def getPopularMovies(self, user_id: UserId = None):
+        movies_from_api = self.__movie.popular()
+        if not movies_from_api:
+            return None
+        movies = []
+        for movie_from_api in movies_from_api:
+            # Some details (as genres) are not included when makeng the popular query
+            # So we have to make details query for each movie
+            movie = self.__movie.details(movie_from_api.id)
+            movies.append(self.__getMovieFromApiResult(movie, user_id))
+        return movies
 
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
         following = self.__is_following(result.id, user_id) if user_id else False

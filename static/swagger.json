@@ -83,6 +83,26 @@
           }
         }
       }
+    },
+    "/movies/popular": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns popular movies of the moment",
+        "produces": ["application/json"],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movies not found"
+          }
+        }
+      }
     }
   },
   "components": {

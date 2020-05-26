@@ -17,3 +17,15 @@ def get_movie(movie_id: int):
         abort(404)
 
     return jsonify(FromMovieToDict.with_movie(movie))
+
+
+
+@movies.route('/popular', methods=["GET"])
+def get_popular_movies():
+    movie_repository = MovieRepository()
+
+    movies = movie_repository.getPopularMovies()
+    if not movies:
+        abort(404)
+
+    return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
