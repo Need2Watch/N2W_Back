@@ -1,3 +1,4 @@
+import os
 from ..model.movie import Movie
 from ...user.model.user_id import UserId
 
@@ -12,7 +13,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-import os
 
 POSTER_URL = "https://image.tmdb.org/t/p/original"
 
@@ -26,9 +26,9 @@ class MovieRepository:
         self.__tmdb.debug = True
         self.__movie = ApiMovies()
         self.__followed_movies = db.Table("followed_movies", db_metadata,
-                                autoload=True, autoload_with=db_engine)
+                                          autoload=True, autoload_with=db_engine)
         self.__watched_movies = db.Table("watched_movies", db_metadata,
-                                autoload=True, autoload_with=db_engine)
+                                         autoload=True, autoload_with=db_engine)
 
     def add(self, movie: Movie):
         pass
@@ -53,7 +53,7 @@ class MovieRepository:
             return None
         movies = []
         for movie_from_api in movies_from_api:
-            # Some details (as genres) are not included when makeng the popular query
+            # Some details (as genres) are not included when making the popular query
             # So we have to make details query for each movie
             movie = self.__movie.details(movie_from_api.id)
             movies.append(self.__getMovieFromApiResult(movie, user_id))
@@ -65,14 +65,14 @@ class MovieRepository:
             return None
         movies = []
         for movie_from_api in movies_from_api:
-            # Some details (as genres) are not included when makeng the search query
+            # Some details (as genres) are not included when making the search query
             # So we have to make details query for each movie
             movie = self.__movie.details(movie_from_api.id)
             movies.append(self.__getMovieFromApiResult(movie, user_id))
         return movies
 
     def getSimilarById(self, movie_id: int, user_id: UserId = None):
-        # Whe the movie_id is a 404 in the api tmdbv3api returns an error
+        # When the movie_id is a 404 in the api tmdbv3api returns an error
         # So we have to force the 404 in that case
         try:
             movies_from_api = self.__movie.similar(movie_id)
@@ -83,7 +83,7 @@ class MovieRepository:
             return None
         movies = []
         for movie_from_api in movies_from_api:
-            # Some details (as genres) are not included when makeng the simmilar query
+            # Some details (as genres) are not included when making the similar query
             # So we have to make details query for each movie
             movie = self.__movie.details(movie_from_api.id)
             movies.append(self.__getMovieFromApiResult(movie, user_id))
@@ -92,57 +92,56 @@ class MovieRepository:
     def follow_movie(self, user_id: UserId, movie_id: int):
         if self.__is_following(movie_id, user_id):
             return False
-        query = db.insert(self.__followed_movies).values(user_id=user_id.value, movie_id=movie_id)
+        query = db.insert(self.__followed_movies).values(
+            user_id=user_id.value, movie_id=movie_id)
         resultProxy = db_connection.execute(query)
-
 
     def unfollow_movie(self, user_id: UserId, movie_id: int):
         if not self.__is_following(movie_id, user_id):
             return False
-        query = db.delete(self.__followed_movies).where(                                
-                                    and_(self.__followed_movies.columns.user_id == user_id.value,
-                                    self.__followed_movies.columns.movie_id == movie_id)
-                        )
+        query = db.delete(self.__followed_movies).where(
+            and_(self.__followed_movies.columns.user_id == user_id.value,
+                 self.__followed_movies.columns.movie_id == movie_id)
+        )
         resultProxy = db_connection.execute(query)
-
 
     def watch_movie(self, user_id: UserId, movie_id: int):
         if self.__has_watched(movie_id, user_id):
             return False
-        query = db.insert(self.__watched_movies).values(user_id=user_id.value, movie_id=movie_id)
+        query = db.insert(self.__watched_movies).values(
+            user_id=user_id.value, movie_id=movie_id)
         resultProxy = db_connection.execute(query)
-
 
     def unwatch_movie(self, user_id: UserId, movie_id: int):
         if not self.__has_watched(movie_id, user_id):
             return False
         query = db.delete(self.__watched_movies).where(
-                                and_(self.__followed_movies.columns.user_id == user_id.value,
-                                    self.__followed_movies.columns.movie_id == movie_id)
-                        )
+            and_(self.__followed_movies.columns.user_id == user_id.value,
+                 self.__followed_movies.columns.movie_id == movie_id)
+        )
         resultProxy = db_connection.execute(query)
 
-
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
-        following = self.__is_following(result.id, user_id) if user_id else False
+        following = self.__is_following(
+            result.id, user_id) if user_id else False
         watched = self.__has_watched(result.id, user_id) if user_id else False
         poster = (POSTER_URL + result.poster_path) if result.poster_path else ""
         return Movie(
-            movie_id = result.id,
-            title = result.title,
-            poster_url = poster,
-            rating = result.vote_average,
-            genres = list(map(lambda genre: genre["name"], result.genres)),
-            overview = result.overview,
-            following = following,
-            watched = watched
+            movie_id=result.id,
+            title=result.title,
+            poster_url=poster,
+            rating=result.vote_average,
+            genres=list(map(lambda genre: genre["name"], result.genres)),
+            overview=result.overview,
+            following=following,
+            watched=watched
         )
 
     def __is_following(self, movie_id: int, user_id: UserId):
         query = db.select([self.__followed_movies]).where(
-                    and_(self.__followed_movies.columns.user_id == user_id.value,
-                        self.__followed_movies.columns.movie_id == movie_id)
-                )
+            and_(self.__followed_movies.columns.user_id == user_id.value,
+                 self.__followed_movies.columns.movie_id == movie_id)
+        )
         resultProxy = db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:
@@ -151,10 +150,10 @@ class MovieRepository:
 
     def __has_watched(self, movie_id: int, user_id: UserId):
         query = db.select([self.__watched_movies]).where(
-                    and_(self.__watched_movies.columns.user_id == user_id.value,
-                        self.__watched_movies.columns.movie_id == movie_id
-                        )
-                )
+            and_(self.__watched_movies.columns.user_id == user_id.value,
+                 self.__watched_movies.columns.movie_id == movie_id
+                 )
+        )
         resultProxy = db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:
