@@ -3,10 +3,12 @@ import os
 from flask import Flask
 from .config import config
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 from .src.user.application.users import users
 from .src.user.application.auth import auth
 from .src.movie.application.movies import movies
+
 
 def create_app(environment):
     app = Flask(__name__)
@@ -17,6 +19,7 @@ def create_app(environment):
 environment = config['development']
 
 app = create_app(environment)
+CORS(app)
 
 ### swagger specific ###
 SWAGGER_URL = ''
