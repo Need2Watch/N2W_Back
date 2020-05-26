@@ -48,6 +48,28 @@ def get_similar_movies(movie_id: int, user_id: str = None):
     return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
 
 
+@movies.route('/following/<string:user_id>', methods=["GET"])
+def get_following_movies(user_id: str):
+    movie_repository = MovieRepository()
+    user_id = UserId.from_string(user_id)
+    movies = movie_repository.get_following_movies(user_id)
+    if not movies:
+        abort(404)
+
+    return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
+
+
+@movies.route('/watched/<string:user_id>', methods=["GET"])
+def get_watched_movies(user_id: str):
+    movie_repository = MovieRepository()
+    user_id = UserId.from_string(user_id)
+    movies = movie_repository.get_watched_movies(user_id)
+    if not movies:
+        abort(404)
+
+    return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
+
+
 @movies.route('/search', methods=["POST"])
 def search_movie(user_id: str = None):
     movie_repository = MovieRepository()
@@ -113,6 +135,3 @@ def unwatch_movie():
     movie_repository.unwatch_movie(user_id, movie_id)
 
     return '200'
-    
-
-

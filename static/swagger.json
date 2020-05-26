@@ -253,6 +253,62 @@
         }
       }
     },
+    "/movies/following/{user_id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns the followed movies by the user of the given id",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movies not found"
+          }
+        }
+      }
+    },
+    "/movies/watched/{user_id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns the watched movies by the user of the given id",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/components/schemas/movie"
+            }
+          },
+          "404": {
+            "description": "Movies not found"
+          }
+        }
+      }
+    },
     "/movies/search": {
       "post": {
         "tags": ["Movie"],

@@ -89,6 +89,34 @@ class MovieRepository:
             movies.append(self.__getMovieFromApiResult(movie, user_id))
         return movies
 
+    def get_following_movies(self, user_id: UserId):
+        query = db.select([self.__followed_movies.columns.movie_id]).where(
+            self.__followed_movies.columns.user_id == user_id.value)
+
+        result_proxy = db_connection.execute(query)
+        result_set = result_proxy.fetchall()
+        following_movies_ids = self.__getMovieIdsFromResult(result_set)
+
+        movies = []
+        for following_movie_id in following_movies_ids:
+            movies.append(self.getById(following_movie_id, user_id))
+
+        return movies
+
+    def get_watched_movies(self, user_id: UserId):
+        query = db.select([self.__watched_movies.columns.movie_id]).where(
+            self.__watched_movies.columns.user_id == user_id.value)
+
+        result_proxy = db_connection.execute(query)
+        result_set = result_proxy.fetchall()
+        watched_movies_ids = self.__getMovieIdsFromResult(result_set)
+
+        movies = []
+        for watched_movie_id in watched_movies_ids:
+            movies.append(self.getById(watched_movie_id, user_id))
+
+        return movies
+
     def follow_movie(self, user_id: UserId, movie_id: int):
         if self.__is_following(movie_id, user_id):
             return False
@@ -120,6 +148,14 @@ class MovieRepository:
                  self.__followed_movies.columns.movie_id == movie_id)
         )
         resultProxy = db_connection.execute(query)
+
+    def __getMovieIdsFromResult(self, result: tuple):
+        movie_ids = []
+        for movie_id_result in result:
+            movie_id = movie_id_result[0]
+            movie_ids.append(movie_id)
+
+        return movie_ids
 
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
         following = self.__is_following(
