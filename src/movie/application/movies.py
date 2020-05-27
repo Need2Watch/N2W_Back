@@ -36,6 +36,18 @@ def get_popular_movies(user_id: str = None):
     return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
 
 
+@movies.route('/top', methods=["GET"])
+@movies.route('/top/<string:user_id>', methods=["GET"])
+def get_top_movies(user_id: str = None):
+    movie_repository = MovieRepository()
+    user_id = UserId.from_string(user_id) if user_id else None
+    movies = movie_repository.getTopRated(user_id)
+    if not movies:
+        abort(404)
+
+    return jsonify(list(map(lambda movie: FromMovieToDict.with_movie(movie), movies)))
+
+
 @movies.route('/similar/<int:movie_id>', methods=["GET"])
 @movies.route('/similar/<int:movie_id>/<string:user_id>', methods=["GET"])
 def get_similar_movies(movie_id: int, user_id: str = None):

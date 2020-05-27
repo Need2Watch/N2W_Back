@@ -274,6 +274,69 @@
         }
       }
     },
+    "/movies/top": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns top rated movies of the moment",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Movies not found"
+          }
+        }
+      }
+    },
+    "/movies/top/{user_id}": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Returns top rated movies of the moment for the given user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "schema": {
+                      "$ref": "#/components/schemas/movie"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Movies not found"
+          }
+        }
+      }
+    },
     "/movies/similar/{id}": {
       "get": {
         "tags": ["Movie"],

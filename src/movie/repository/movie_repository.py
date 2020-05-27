@@ -57,6 +57,16 @@ class MovieRepository:
                 movie_from_api, user_id))
         return movies
 
+    def getTopRated(self, user_id: UserId = None):
+        movies_from_api = self.__movie.top_rated()
+        if not movies_from_api:
+            return None
+        movies = []
+        for movie_from_api in movies_from_api:
+            movies.append(self.__getMovieFromApiResult(
+                movie_from_api, user_id))
+        return movies
+
     def getByTitle(self, title: str, user_id: UserId = None):
         movies_from_api = self.__movie.search(title)
         if not movies_from_api:
