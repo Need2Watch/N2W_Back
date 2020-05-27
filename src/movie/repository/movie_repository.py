@@ -53,10 +53,8 @@ class MovieRepository:
             return None
         movies = []
         for movie_from_api in movies_from_api:
-            # Some details (as genres) are not included when making the popular query
-            # So we have to make details query for each movie
-            movie = self.__movie.details(movie_from_api.id)
-            movies.append(self.__getMovieFromApiResult(movie, user_id))
+            movies.append(self.__getMovieFromApiResult(
+                movie_from_api, user_id))
         return movies
 
     def getByTitle(self, title: str, user_id: UserId = None):
@@ -65,10 +63,8 @@ class MovieRepository:
             return None
         movies = []
         for movie_from_api in movies_from_api:
-            # Some details (as genres) are not included when making the search query
-            # So we have to make details query for each movie
-            movie = self.__movie.details(movie_from_api.id)
-            movies.append(self.__getMovieFromApiResult(movie, user_id))
+            movies.append(self.__getMovieFromApiResult(
+                movie_from_api, user_id))
         return movies
 
     def getSimilarById(self, movie_id: int, user_id: UserId = None):
@@ -83,10 +79,8 @@ class MovieRepository:
             return None
         movies = []
         for movie_from_api in movies_from_api:
-            # Some details (as genres) are not included when making the similar query
-            # So we have to make details query for each movie
-            movie = self.__movie.details(movie_from_api.id)
-            movies.append(self.__getMovieFromApiResult(movie, user_id))
+            movies.append(self.__getMovieFromApiResult(
+                movie_from_api, user_id))
         return movies
 
     def get_following_movies(self, user_id: UserId):
@@ -158,16 +152,26 @@ class MovieRepository:
         return movie_ids
 
     def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
-        following = self.__is_following(
-            result.id, user_id) if user_id else False
-        watched = self.__has_watched(result.id, user_id) if user_id else False
-        poster = (POSTER_URL + result.poster_path) if result.poster_path else ""
+        following = False
+        watched = False
+        if user_id:
+            following = self.__is_following(result.id, user_id)
+            watched = self.__has_watched(result.id, user_id)
+
+        poster = ""
+        if result.poster_path:
+            poster = (POSTER_URL + result.poster_path)
+
+        genres = []
+        if hasattr(result, "genres"):
+            genres = result.genres
+
         return Movie(
             movie_id=result.id,
             title=result.title,
             poster_url=poster,
             rating=result.vote_average,
-            genres=list(map(lambda genre: genre["name"], result.genres)),
+            genres=genres,
             overview=result.overview,
             following=following,
             watched=watched

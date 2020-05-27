@@ -20,7 +20,6 @@ environment = config['development']
 
 app = create_app(environment)
 CORS(app)
-
 ### swagger specific ###
 SWAGGER_URL = ''
 API_URL = '/static/swagger.json'

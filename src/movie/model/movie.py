@@ -2,7 +2,7 @@
 class Movie:
 
     def __init__(self, movie_id, title, poster_url, rating,
-                 genres, overview, following=False, watched=False):
+                 genres=[], overview="", following=False, watched=False):
         self.__movie_id = movie_id
         self.__title = title
         self.__poster_url = poster_url
