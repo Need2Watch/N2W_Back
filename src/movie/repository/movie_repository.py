@@ -2,8 +2,6 @@ import os
 from ..model.movie import Movie
 from ...user.model.user_id import UserId
 
-from ....config import db_engine, db_metadata, db_connection
-
 from tmdbv3api import TMDb
 from tmdbv3api import Movie as ApiMovies
 import sqlalchemy as db
@@ -25,10 +23,13 @@ class MovieRepository:
         self.__tmdb.language = 'en'
         self.__tmdb.debug = True
         self.__movie = ApiMovies()
-        self.__followed_movies = db.Table("followed_movies", db_metadata,
-                                          autoload=True, autoload_with=db_engine)
-        self.__watched_movies = db.Table("watched_movies", db_metadata,
-                                         autoload=True, autoload_with=db_engine)
+        self.__db_engine = db.create_engine(os.getenv('DB_ENGINE'))
+        self.__db_connection = self.__db_engine.connect()
+        self.__db_metadata = db.MetaData()
+        self.__followed_movies = db.Table("followed_movies", self.__db_metadata,
+                                          autoload=True, autoload_with=self.__db_engine)
+        self.__watched_movies = db.Table("watched_movies", self.__db_metadata,
+                                         autoload=True, autoload_with=self.__db_engine)
 
     def add(self, movie: Movie):
         pass
@@ -97,7 +98,7 @@ class MovieRepository:
         query = db.select([self.__followed_movies.columns.movie_id]).where(
             self.__followed_movies.columns.user_id == user_id.value)
 
-        result_proxy = db_connection.execute(query)
+        result_proxy = self.__db_connection.execute(query)
         result_set = result_proxy.fetchall()
         following_movies_ids = self.__getMovieIdsFromResult(result_set)
 
@@ -111,7 +112,7 @@ class MovieRepository:
         query = db.select([self.__watched_movies.columns.movie_id]).where(
             self.__watched_movies.columns.user_id == user_id.value)
 
-        result_proxy = db_connection.execute(query)
+        result_proxy = self.__db_connection.execute(query)
         result_set = result_proxy.fetchall()
         watched_movies_ids = self.__getMovieIdsFromResult(result_set)
 
@@ -126,7 +127,7 @@ class MovieRepository:
             return False
         query = db.insert(self.__followed_movies).values(
             user_id=user_id.value, movie_id=movie_id)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def unfollow_movie(self, user_id: UserId, movie_id: int):
         if not self.__is_following(movie_id, user_id):
@@ -135,14 +136,14 @@ class MovieRepository:
             and_(self.__followed_movies.columns.user_id == user_id.value,
                  self.__followed_movies.columns.movie_id == movie_id)
         )
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def watch_movie(self, user_id: UserId, movie_id: int):
         if self.__has_watched(movie_id, user_id):
             return False
         query = db.insert(self.__watched_movies).values(
             user_id=user_id.value, movie_id=movie_id)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def unwatch_movie(self, user_id: UserId, movie_id: int):
         if not self.__has_watched(movie_id, user_id):
@@ -151,7 +152,7 @@ class MovieRepository:
             and_(self.__followed_movies.columns.user_id == user_id.value,
                  self.__followed_movies.columns.movie_id == movie_id)
         )
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def __getMovieIdsFromResult(self, result: tuple):
         movie_ids = []
@@ -192,7 +193,7 @@ class MovieRepository:
             and_(self.__followed_movies.columns.user_id == user_id.value,
                  self.__followed_movies.columns.movie_id == movie_id)
         )
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:
             return False
@@ -204,7 +205,7 @@ class MovieRepository:
                  self.__watched_movies.columns.movie_id == movie_id
                  )
         )
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:
             return False

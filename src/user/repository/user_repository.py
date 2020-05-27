@@ -1,8 +1,9 @@
+import os
+
 from ..model.user import User
 from ..model.user_id import UserId
 from ..model.password import Password
 
-from ....config import db_engine, db_metadata, db_connection
 
 from uuid import UUID
 import sqlalchemy as db
@@ -11,32 +12,35 @@ import sqlalchemy as db
 class UserRepository:
 
     def __init__(self):
-        self.__users = db.Table("users", db_metadata,
-                                autoload=True, autoload_with=db_engine)
+        self.__db_engine = db.create_engine(os.getenv('DB_ENGINE'))
+        self.__db_connection = self.__db_engine.connect()
+        self.__db_metadata = db.MetaData()
+        self.__users = db.Table("users", self.__db_metadata,
+                                autoload=True, autoload_with=self.__db_engine)
 
     def add(self, user: User):
         query = db.insert(self.__users).values(user_id=user.user_id, username=user.username,
                                                password=user.password, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
                                                city=user.city)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def delete(self, user: User):
         query = db.delete(self.__users).where(
             self.__users.columns.user_id == user.user_id)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def update(self, user: User):
         query = db.update(self.__users).values(user_id=user.user_id, username=user.username,
                                                password=user.password, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
                                                city=user.city).where(self.__users.columns.user_id == user.user_id)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
 
     def getById(self, user_id: UUID):
         query = db.select([self.__users]).where(
             self.__users.columns.user_id == user_id)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:
             return None
@@ -45,7 +49,7 @@ class UserRepository:
     def getByEmail(self, email):
         query = db.select([self.__users]).where(
             self.__users.columns.email == email)
-        resultProxy = db_connection.execute(query)
+        resultProxy = self.__db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:
             return None
