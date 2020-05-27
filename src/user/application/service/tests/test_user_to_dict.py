@@ -7,8 +7,10 @@ from ..from_user_to_dict import FromUserToDict
 from ....model.user import User
 from ....model.user_id import UserId
 from ....model.password import Password
+from hashlib import md5
 
 fake = Faker(['es_ES', 'it_IT'])
+
 
 class TestFromUserToDict(unittest.TestCase):
 
@@ -27,10 +29,13 @@ class TestFromUserToDict(unittest.TestCase):
 
         backend_dict = FromUserToDict.with_user(user)
 
+        digest = md5(email.lower().encode('utf-8')).hexdigest()
+
         expected_value = {
             'user_id': str(user_id.value),
             'username': username,
             'password': password.value,
+            'profile_picture': 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, '500'),
             'first_name': first_name,
             'last_name': last_name,
             'email': email,

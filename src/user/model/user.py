@@ -17,7 +17,6 @@ class User:
         self.__country = country
         self.__city = city
 
-
     @property
     def user_id(self):
         return self.__user_id.value
@@ -51,10 +50,10 @@ class User:
         return self.__city
 
     @property
-    def profile_picture(self, size):
+    def profile_picture(self, size='500'):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
+            digest, str(size))
 
     def verifyPassword(self, password: str):
         return self.__password.verify(password)
