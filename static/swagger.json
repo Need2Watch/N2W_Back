@@ -31,7 +31,7 @@
     "/users": {
       "post": {
         "tags": ["User"],
-        "summary": "Updates an existing user",
+        "summary": "Creates a new user",
         "requestBody": {
           "description": "User Scheme",
           "required": true,
@@ -66,7 +66,7 @@
     "/users/{user_id}": {
       "put": {
         "tags": ["User"],
-        "summary": "Creates a new user",
+        "summary": "Updates an existing user",
         "parameters": [
           {
             "name": "user_id",
@@ -445,21 +445,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "schema": {
-                      "$ref": "#/components/schemas/movie"
-                    }
-                  }
+                  "$ref": "#/components/schemas/movie"
                 }
               }
             }
           },
+          "400": {
+            "description": "Bad syntax"
+          },
           "404": {
             "description": "Movies not found"
-          },
-          "409": {
-            "description": "Already existing user"
           }
         }
       }
@@ -633,6 +628,12 @@
           }
         }
       },
+      "movie-list": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/movie"
+        }
+      },
       "movie": {
         "properties": {
           "movie_id": {
@@ -668,7 +669,7 @@
       "search": {
         "properties": {
           "title": {
-            "type": "integer"
+            "type": "string"
           },
           "user_id": {
             "type": "string",
