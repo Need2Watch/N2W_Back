@@ -1,6 +1,6 @@
 [![Stargazers][stars-shield]](https://github.com/Need2Watch/N2W_Back/stargazers)
 [![Issues][issues-shield]](https://github.com/Need2Watch/N2W_Back/issues)
-[![MIT License][license-shield]](https://github.com/Need2Watch/N2W_Back/blob/master/LICENSE)
+[![GPL3 License][license-shield]](https://github.com/Need2Watch/N2W_Back/blob/master/LICENSE)
 
 # Need2Watch Backend API
 
