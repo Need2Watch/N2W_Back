@@ -22,26 +22,22 @@ The backend of this application consist in an API REST.
 
 ### Steps
 
-- Create a Python 3.7 Virtual environment
-- Inside of the environment run `pip install -r requirements`
-- Run `docker-compose up -d`
-- Create a .env file and set `DB_ENGINE` and `MOVIE_API_KEY` from [TMDB](https://www.themoviedb.org/settings/api)
-- Run `python create_db.py`
-- Run `flask run`
-- Access to `http://127.0.0.1:5000` and you will see the Swagger UI with all the API methods and you can test them.
+1. Create a Python 3.7 Virtual environment
+1. Inside of the environment run `pip install -r requirements`
+1. Run `docker-compose up -d`
+1. Create a .env file and set `DB_ENGINE` and `MOVIE_API_KEY` from [TMDB](https://www.themoviedb.org/settings/api)
+1. Run `python create_db.py`
+1. Run `flask run`
+1. Access to `http://127.0.0.1:5000` and you will see the Swagger UI with all the API methods and you can test them.
 
-#### Steps for Ubuntu and similar
+#### Specific steps for Ubuntu and similar
 
-- [Install Docker](https://docs.docker.com/engine/install/ubuntu/)
-- [Install Docker-Compose](https://docs.docker.com/compose/install/)
-- For installing the dependencies run `sudo apt install python3.7 python3.7-dev virtualenv build-essential mysql-server mysql-client libmysqlclient-dev libsqlclient-dev libssl-dev`
-- To create the virtualenvironment run `virtualenv -p python3.7 venv`
-- To activate it run `source venv/bin/activate`
-- Then run the commands specified above `pip install -r requirements`
-- Run `docker-compose up -d`
-- Run `python create_db.py`
-- Run `flask run`
-- Access to `http://127.0.0.1:5000` and you will see the Swagger UI with all the API methods and you can test them.
+1. [Install Docker](https://docs.docker.com/engine/install/ubuntu/)
+1. [Install Docker-Compose](https://docs.docker.com/compose/install/)
+1. Install all the dependencies running `sudo apt install python3.7 python3.7-dev virtualenv build-essential mysql-server mysql-client libmysqlclient-dev libsqlclient-dev libssl-dev -y`
+1. Create the virtual environment with `virtualenv -p python3.7 venv`
+1. Activate it running `source venv/bin/activate`
+1. Follow the [steps specified above](https://github.com/Need2Watch/N2W_Back#steps)
 
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
