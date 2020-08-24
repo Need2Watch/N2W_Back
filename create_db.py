@@ -5,11 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-engine = db.create_engine(os.getenv("DB_ENGINE"))
-connection = engine.connect()
+engines = {
+    'database': db.create_engine(os.getenv("DB_ENGINE")),
+    'test_database': db.create_engine(os.getenv("DB_ENGINE_TEST"))
+}
 metadata = db.MetaData()
 
-def remove_existing_tables():
+def remove_existing_tables(engine):
     sql = 'DROP TABLE IF EXISTS users;DROP TABLE IF EXISTS watched_movies;DROP TABLE IF EXISTS followed_movies;'
     result = engine.execute(sql)
 
@@ -38,8 +40,12 @@ def create_watched_movies_table():
             )
 
 if __name__ == "__main__":
-    remove_existing_tables()
+    for engine in engines.values():
+        remove_existing_tables(engine)
+
     create_user_table()
     create_watched_movies_table()
     create_following_movies_table()
-    metadata.create_all(engine)
+
+    for engine in engines.values():
+        metadata.create_all(engine)
