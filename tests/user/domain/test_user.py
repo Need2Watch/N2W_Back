@@ -2,9 +2,9 @@ import unittest
 import json
 import uuid
 from faker import Faker
-from ..user import User
-from ..user_id import UserId
-from ..password import Password
+from ....src.user.domain.user import User
+from ....src.user.domain.user_id import UserId
+from ....src.user.domain.password import Password
 
 fake = Faker(['es_ES', 'it_IT'])
 
@@ -32,5 +32,3 @@ class TestUser(unittest.TestCase):
         self.assertEqual(user.email, email)
         self.assertEqual(user.country, country)
         self.assertEqual(user.city, city)
-
-

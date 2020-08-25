@@ -5,8 +5,7 @@ from .config import config
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
 
-from .src.user.application.users import users
-from .src.user.application.auth import auth
+from .src.user.infrastructure.users_controller import users
 from .src.movie.application.movies import movies
 
 
@@ -34,4 +33,3 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 app.register_blueprint(users)
 app.register_blueprint(movies)
-app.register_blueprint(auth)

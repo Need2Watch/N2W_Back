@@ -2,7 +2,7 @@ import unittest
 import uuid
 from faker import Faker
 
-from ..login_validator import LoginValidator
+from ....src.user.infrastructure.login_validator import LoginValidator
 
 fake = Faker(['es_ES', 'it_IT'])
 
@@ -16,7 +16,7 @@ class TestLoginValidator(unittest.TestCase):
 
         self.assertTrue(LoginValidator().validate_login(login))
 
-    
+
     def test_bad_case_not_completed(self):
         login = {
             "email": fake.email()

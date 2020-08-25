@@ -1,11 +1,10 @@
 import unittest
-import json
 from faker import Faker
 import uuid
 
-from ..from_dict_to_user import FromDictToUser
-from ....model.user import User
-from ....model.password import Password
+from ....src.user.infrastructure.from_dict_to_user import FromDictToUser
+from ....src.user.domain.user import User
+from ....src.user.domain.password import Password
 
 fake = Faker(['es_ES', 'it_IT'])
 

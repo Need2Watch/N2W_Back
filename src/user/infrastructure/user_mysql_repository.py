@@ -1,15 +1,15 @@
 import os
 
-from ..model.user import User
-from ..model.user_id import UserId
-from ..model.password import Password
+from ..domain.user import User
+from ..domain.user_id import UserId
+from ..domain.password import Password
 
 
 from uuid import UUID
 import sqlalchemy as db
 
 
-class UserRepository:
+class UserMysqlRepository:
 
     def __init__(self):
         self.__db_engine = db.create_engine(os.getenv('DB_ENGINE'))
@@ -37,9 +37,9 @@ class UserRepository:
                                                city=user.city).where(self.__users.columns.user_id == user.user_id)
         resultProxy = self.__db_connection.execute(query)
 
-    def getById(self, user_id: UUID):
+    def getById(self, user_id: UserId):
         query = db.select([self.__users]).where(
-            self.__users.columns.user_id == user_id)
+            self.__users.columns.user_id == user_id.value)
         resultProxy = self.__db_connection.execute(query)
         resultSet = resultProxy.fetchall()
         if not resultSet:

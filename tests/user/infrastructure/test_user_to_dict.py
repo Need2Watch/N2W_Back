@@ -1,12 +1,11 @@
 import unittest
-import json
 from faker import Faker
 import uuid
 
-from ..from_user_to_dict import FromUserToDict
-from ....model.user import User
-from ....model.user_id import UserId
-from ....model.password import Password
+from ....src.user.infrastructure.from_user_to_dict import FromUserToDict
+from ....src.user.domain.user import User
+from ....src.user.domain.user_id import UserId
+from ....src.user.domain.password import Password
 from hashlib import md5
 
 fake = Faker(['es_ES', 'it_IT'])

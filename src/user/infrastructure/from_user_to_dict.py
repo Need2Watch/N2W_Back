@@ -1,5 +1,5 @@
-from ...model.user import User
-from ...model.user_id import UserId
+from ..domain.user import User
+from ..domain.user_id import UserId
 
 import json
 

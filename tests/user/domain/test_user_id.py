@@ -2,7 +2,7 @@
 import unittest
 import uuid
 from uuid import UUID
-from ..user_id import UserId
+from ....src.user.domain.user_id import UserId
 
 
 class TestUserId(unittest.TestCase):

@@ -1,6 +1,6 @@
 import os
 from ..model.movie import Movie
-from ...user.model.user_id import UserId
+from ...user.domain.user_id import UserId
 
 from tmdbv3api import TMDb
 from tmdbv3api import Movie as ApiMovies

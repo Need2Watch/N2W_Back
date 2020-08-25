@@ -1,6 +1,6 @@
-from ...model.user import User
-from ...model.user_id import UserId
-from ...model.password import Password
+from ..domain.user import User
+from ..domain.user_id import UserId
+from ..domain.password import Password
 
 import json
 
@@ -21,5 +21,3 @@ class FromDictToUser:
             country=user_dict['country'],
             city=user_dict['city']
         )
-
-    

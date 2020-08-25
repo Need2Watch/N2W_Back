@@ -1,6 +1,6 @@
 import unittest
 from passlib.hash import sha256_crypt
-from ..password import Password
+from ....src.user.domain.password import Password
 
 
 class TestPassword(unittest.TestCase):

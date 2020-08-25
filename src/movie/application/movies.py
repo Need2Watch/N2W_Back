@@ -6,8 +6,7 @@ from flask import request
 from ..repository.movie_repository import MovieRepository
 from .service.from_movie_to_dict import FromMovieToDict
 
-from ...user.repository.user_repository import UserRepository
-from ...user.model.user_id import UserId
+from ...user.domain.user_id import UserId
 
 movies = Blueprint("movies", __name__, url_prefix="/movies")
 

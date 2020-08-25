@@ -2,7 +2,7 @@ import unittest
 import uuid
 from faker import Faker
 
-from ..user_validator import UserValidator
+from ....src.user.infrastructure.user_validator import UserValidator
 
 fake = Faker(['es_ES', 'it_IT'])
 
@@ -22,7 +22,7 @@ class TestUserValidator(unittest.TestCase):
 
         self.assertTrue(UserValidator().validate_user(user))
 
-    
+
     def test_bad_case_not_completed(self):
         user = {
             "user_id": str(uuid.uuid4()),
