@@ -1,8 +1,8 @@
-from src.user.domain.user import User
-from src.user.domain.user_id import UserId
 from faker import Faker
 import uuid
 
+from ....src.user.domain.user import User
+from ....src.user.domain.user_id import UserId
 from ....src.user.infrastructure.user_repository_double import UserRepositoryDouble
 from ....src.user.application.create_user import CreateUser
 
