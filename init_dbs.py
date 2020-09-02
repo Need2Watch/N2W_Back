@@ -1,9 +1,6 @@
 import sqlalchemy as db
 import os
 from uuid import UUID
-from dotenv import load_dotenv
-
-load_dotenv()
 
 engines = {
     'database': db.create_engine(os.getenv("DB_ENGINE")),

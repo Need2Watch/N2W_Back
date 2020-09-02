@@ -6,11 +6,6 @@ from tmdbv3api import TMDb
 from tmdbv3api import Movie as ApiMovies
 import sqlalchemy as db
 from sqlalchemy import and_
-import uuid
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 POSTER_URL = "https://image.tmdb.org/t/p/original"
 
@@ -162,7 +157,7 @@ class MovieRepository:
 
         return movie_ids
 
-    def __getMovieFromApiResult(self, result: Movie, user_id: UserId = None):
+    def __getMovieFromApiResult(self, result, user_id: UserId = None):
         following = False
         watched = False
         if user_id:

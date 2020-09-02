@@ -1,25 +1,14 @@
-import os
-
 from flask import Flask
-from .config import config
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
 
 from .src.user.infrastructure.users_controller import users
 from .src.movie.application.movies import movies
 
-
-def create_app(environment):
-    app = Flask(__name__)
-    app.config.from_object(environment)
-    return app
-
-
-environment = config['development']
-
-app = create_app(environment)
+app = Flask(__name__)
 CORS(app)
-### swagger specific ###
+
+# Swagger
 SWAGGER_URL = ''
 API_URL = '/static/swagger.json'
 SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
