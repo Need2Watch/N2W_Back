@@ -24,9 +24,9 @@ class TestUser(unittest.TestCase):
         user = User(user_id, username, password, first_name, last_name,
                     email, country, city)
 
-        self.assertEqual(user.user_id, user_id.value)
+        self.assertEqual(user.user_id.value, user_id.value)
         self.assertEqual(user.username, username)
-        self.assertEqual(user.password, password.value)
+        self.assertEqual(user.password.value, password.value)
         self.assertEqual(user.first_name, first_name)
         self.assertEqual(user.last_name, last_name)
         self.assertEqual(user.email, email)

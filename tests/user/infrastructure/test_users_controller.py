@@ -49,6 +49,6 @@ class TestUsersController():
 
 
 def assertUser(user: User):
-    assert str(user.user_id) == user_id
+    assert str(user.user_id.value) == user_id
     assert user.username == username
     assert user.email == email

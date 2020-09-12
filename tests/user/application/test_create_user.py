@@ -40,6 +40,6 @@ def a_non_existing_user():
 
 
 def assert_user(found_user: User, user):
-    assert str(found_user.user_id) == user['user_id']
+    assert str(found_user.user_id.value) == user['user_id']
     assert found_user.username == user['username']
     assert found_user.email == user['email']

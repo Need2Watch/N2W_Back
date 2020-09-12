@@ -10,11 +10,11 @@ class FromUserToDict:
         pass
 
     @staticmethod
-    def with_user(user):
+    def with_user(user: User):
         user_dict = {
-            'user_id': str(user.user_id),
+            'user_id': str(user.user_id.value),
             'username': user.username,
-            'password': user.password,
+            'password': user.password.value,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,

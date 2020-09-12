@@ -1,4 +1,3 @@
-import json
 from hashlib import md5
 from .user_id import UserId
 from .password import Password
@@ -6,7 +5,7 @@ from .password import Password
 
 class User:
 
-    def __init__(self, user_id: UserId, username, password, first_name, last_name,
+    def __init__(self, user_id: UserId, username, password: Password, first_name, last_name,
                  email, country, city):
         self.__user_id: UserId = user_id
         self.__username = username
@@ -19,7 +18,7 @@ class User:
 
     @property
     def user_id(self):
-        return self.__user_id.value
+        return self.__user_id
 
     @property
     def username(self):
@@ -27,7 +26,7 @@ class User:
 
     @property
     def password(self):
-        return self.__password.value
+        return self.__password
 
     @property
     def first_name(self):

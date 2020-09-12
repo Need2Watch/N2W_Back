@@ -14,6 +14,6 @@ class UserRepositoryDouble(UserRepository):
 
     def find(self, user_id: UserId) -> Optional[User]:
         for user in self.__users:
-            if user.user_id == user_id.value:
+            if user.user_id.value == user_id.value:
                 return user
         return None

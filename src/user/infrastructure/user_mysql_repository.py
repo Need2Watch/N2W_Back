@@ -19,22 +19,22 @@ class UserMysqlRepository:
                                 autoload=True, autoload_with=self.__db_engine)
 
     def add(self, user: User):
-        query = db.insert(self.__users).values(user_id=user.user_id, username=user.username,
-                                               password=user.password, first_name=user.first_name,
+        query = db.insert(self.__users).values(user_id=user.user_id.value, username=user.username,
+                                               password=user.password.value, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
                                                city=user.city)
         resultProxy = self.__db_connection.execute(query)
 
     def delete(self, user: User):
         query = db.delete(self.__users).where(
-            self.__users.columns.user_id == user.user_id)
+            self.__users.columns.user_id == user.user_id.value)
         resultProxy = self.__db_connection.execute(query)
 
     def update(self, user: User):
-        query = db.update(self.__users).values(user_id=user.user_id, username=user.username,
-                                               password=user.password, first_name=user.first_name,
+        query = db.update(self.__users).values(user_id=user.user_id.value, username=user.username,
+                                               password=user.password.value, first_name=user.first_name,
                                                last_name=user.last_name, email=user.email, country=user.country,
-                                               city=user.city).where(self.__users.columns.user_id == user.user_id)
+                                               city=user.city).where(self.__users.columns.user_id == user.user_id.value)
         resultProxy = self.__db_connection.execute(query)
 
     def getById(self, user_id: UserId):
