@@ -12,7 +12,7 @@ fake = Faker(['es_ES', 'it_IT'])
 class TestUser(unittest.TestCase):
 
     def test_user_creation(self):
-        user_id = UserId(uuid.uuid4())
+        user_id = UserId(str(uuid.uuid4()))
         username = fake.name()
         password = Password.from_string(fake.password())
         first_name = fake.first_name()

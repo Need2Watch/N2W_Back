@@ -14,7 +14,7 @@ fake = Faker(['es_ES', 'it_IT'])
 class TestFromUserToDict(unittest.TestCase):
 
     def test_with_user(self):
-        user_id = UserId(uuid.uuid4())
+        user_id = UserId(str(uuid.uuid4()))
         username = fake.name()
         password = Password.from_string(fake.password())
         first_name = fake.first_name()
@@ -31,7 +31,7 @@ class TestFromUserToDict(unittest.TestCase):
         digest = md5(email.lower().encode('utf-8')).hexdigest()
 
         expected_value = {
-            'user_id': str(user_id.value),
+            'user_id': user_id.value,
             'username': username,
             'password': password.value,
             'profile_picture': 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, '500'),

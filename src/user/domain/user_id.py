@@ -4,23 +4,19 @@ from uuid import UUID
 
 class UserId():
 
-    def __init__(self, userid: UUID):
-        self.checkUniqueId(userid)
-        self.checkIdVersion(userid)
-        self.__value: UUID = userid
+    def __init__(self, user_id: str):
+        self.__validate_uuid_v4_format(user_id)
+        self.__value: str = user_id
 
     @staticmethod
-    def from_string(userid: str):
-        return UserId(UUID(userid))
+    def from_string(user_id: str):
+        return UserId(user_id)
 
     @property
     def value(self):
         return self.__value
 
-    def checkUniqueId(self, userid: UUID):
-        if type(userid) != UUID:
-            raise TypeError("User ID must be an UUID instance")
-
-    def checkIdVersion(self, userid: UUID):
-        if userid.version != 4:
-            raise TypeError("User ID must be version 4")
+    def __validate_uuid_v4_format(self, user_id: str):
+        uuid_user_id = UUID(user_id)
+        if uuid_user_id.version != 4:
+            raise TypeError("user_id must be a version 4 uuid")
