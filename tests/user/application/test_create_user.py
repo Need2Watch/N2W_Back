@@ -1,45 +1,37 @@
-from faker import Faker
 import uuid
 
-from ....src.user.domain.user import User
-from ....src.user.domain.user_id import UserId
-from ....src.user.infrastructure.user_repository_double import UserRepositoryDouble
+import pytest
+from faker import Faker
+
 from ....src.user.application.create_user import CreateUser
+from ....src.user.domain.already_existing_user_error import AlreadyExistingUserError
+from ....src.user.domain.user_id import UserId
+from ....src.user.application.user_dto import UserDTO
+from ..builder.user_builder import UserBuilder
+from ..infrastructure.user_in_memory_repository import UserInMemoryRepository
 
 faker = Faker()
 
+user_repository = UserInMemoryRepository()
+use_case: CreateUser = CreateUser(user_repository)
+user_id = UserId.from_string(str(uuid.uuid4()))
+user_email = faker.email()
+
 
 class TestCreateUser():
+
     def test_new_user_is_created(self):
-        user_repository = UserRepositoryDouble()
-        use_case: CreateUser = CreateUser(user_repository)
-        user = a_non_existing_user()
+        user_dto: UserDTO = UserBuilder().with_user_id(user_id.value).with_email(user_email).build_dto()
 
-        use_case.run(user)
+        use_case.run(user_dto)
 
-        user_id = UserId.from_string(user['user_id'])
         found_user = user_repository.find(user_id)
         assert found_user != None
-        assert_user(found_user, user)
+        assert found_user.user_id.value == user_id.value
+        assert found_user.email == user_email
 
     def test_already_existing_user_throws_an_error(self):
-        pass
+        user_dto: UserDTO = UserBuilder().with_user_id(user_id.value).with_email(user_email).build_dto()
 
-
-def a_non_existing_user():
-    return {
-        'user_id': str(uuid.uuid4()),
-        'username': faker.name(),
-        'password': faker.password(),
-        'first_name': faker.first_name(),
-        'last_name': faker.last_name(),
-        'email': faker.email(),
-        'country': faker.country(),
-        'city': faker.city()
-    }
-
-
-def assert_user(found_user: User, user):
-    assert str(found_user.user_id.value) == user['user_id']
-    assert found_user.username == user['username']
-    assert found_user.email == user['email']
+        with pytest.raises(AlreadyExistingUserError):
+            use_case.run(user_dto)
