@@ -11,6 +11,8 @@ from ....n2w import app
 fake = Faker()
 
 
+user_repository = UserMysqlRepository()
+
 user_id = str(uuid.uuid4())
 username = fake.name()
 password = fake.password()
@@ -20,20 +22,20 @@ email = fake.email()
 country = fake.country()
 city = fake.city()
 
+request_params = {
+    "user_id": user_id,
+    "username": username,
+    "password": password,
+    "email": email,
+    "first_name": first_name,
+    "last_name": last_name,
+    "country": country,
+    "city": city
+}
+
 
 class TestUsersController():
     def test_users_post(self):
-        user_repository = UserMysqlRepository()
-        request_params = {
-            "user_id": user_id,
-            "username": username,
-            "password": password,
-            "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
-            "country": country,
-            "city": city
-        }
 
         response = app.test_client().post(
             '/users',
@@ -42,10 +44,19 @@ class TestUsersController():
         )
 
         assert response.status_code == 200
-        searching_user_id = UserId.from_string(user_id)
-        saved_user: Optional[User] = user_repository.getById(searching_user_id)
+        saved_user: Optional[User] = user_repository.find_by_email(email)
         assert saved_user != None
         assertUser(saved_user)
+
+    def test_users_post_returns_409_when_user_already_exists(self):
+        response = app.test_client().post(
+            '/users',
+            data=json.dumps(request_params),
+            content_type='application/json'
+        )
+
+        assert response.status_code == 409
+
 
 
 def assertUser(user: User):

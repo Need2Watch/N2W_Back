@@ -1,15 +1,13 @@
-from flask import Blueprint
-from flask import abort
-from flask import request
-from flask import jsonify
+from flask import Blueprint, abort, jsonify, request
 
-
-from .user_mysql_repository import UserMysqlRepository
-from .from_dict_to_user import FromDictToUser
-from .user_validator import UserValidator
-from .login_validator import LoginValidator
-from .from_user_to_dict import FromUserToDict
+from ..application.create_user import CreateUser
+from ..domain.already_existing_user_error import AlreadyExistingUserError
 from ..domain.user_id import UserId
+from .from_dict_to_user import FromDictToUser
+from .from_user_to_dict import FromUserToDict
+from .login_validator import LoginValidator
+from .user_mysql_repository import UserMysqlRepository
+from .user_validator import UserValidator
 
 users = Blueprint("users", __name__, url_prefix="/users")
 
@@ -21,14 +19,15 @@ def new_user():
     if not UserValidator().validate_user(request.json):
         abort(400)
 
-    email = request.json.get('email')
-    if user_repository.getByEmail(email):
-        abort(409)
+    try:
+        CreateUser(user_repository).run(request.json)
+    except Exception as error:
+        if isinstance(error, AlreadyExistingUserError):
+            abort(409)
+        else:
+            abort(500)
 
-    user = FromDictToUser.with_dict(request.json)
-    user_repository.add(user)
-
-    return jsonify(FromUserToDict.with_user(user))
+    return '200'
 
 
 @users.route('/<string:user_id>', methods=["PUT"])
@@ -46,6 +45,7 @@ def user_update(user_id: str):
 
     return jsonify(FromUserToDict.with_user(user))
 
+
 @users.route("/login", methods=["POST"])
 def login():
     user_repository = UserMysqlRepository()
@@ -56,7 +56,7 @@ def login():
     email = request.json.get('email')
     password = request.json.get('password')
 
-    user = user_repository.getByEmail(email)
+    user = user_repository.find_by_email(email)
     if not user:
         abort(404)
 
