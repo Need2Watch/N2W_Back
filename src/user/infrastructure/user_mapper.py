@@ -1,7 +1,7 @@
 from ..domain.password import Password
 from ..domain.user import User
 from ..domain.user_id import UserId
-from .user_dto import UserDTO
+from ..application.user_dto import UserDTO
 
 
 class UserMapper:

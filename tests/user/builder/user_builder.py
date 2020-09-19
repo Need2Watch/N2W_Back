@@ -5,7 +5,7 @@ from faker import Faker
 from ....src.user.domain.password import Password
 from ....src.user.domain.user import User
 from ....src.user.domain.user_id import UserId
-from ....src.user.infrastructure.user_dto import UserDTO
+from ....src.user.application.user_dto import UserDTO
 from ....src.user.infrastructure.user_mapper import UserMapper
 
 fake = Faker()

@@ -1,5 +1,5 @@
 from ....src.user.domain.user import User
-from ....src.user.infrastructure.user_dto import UserDTO
+from ....src.user.application.user_dto import UserDTO
 from ....src.user.infrastructure.user_mapper import UserMapper
 from ..builder.user_builder import UserBuilder
 
