@@ -2,11 +2,13 @@ import uuid
 
 from faker import Faker
 
+from ....src.user.application.user_dto import UserDTO
+from ....src.user.domain import user_repository
 from ....src.user.domain.password import Password
 from ....src.user.domain.user import User
 from ....src.user.domain.user_id import UserId
-from ....src.user.application.user_dto import UserDTO
 from ....src.user.infrastructure.user_mapper import UserMapper
+from ....src.user.infrastructure.user_mysql_repository import UserMysqlRepository
 
 fake = Faker()
 
@@ -22,13 +24,19 @@ class UserBuilder():
         self.__country = fake.country()
         self.__city = fake.city()
 
-    def with_user_id(self, user_id: str):
-        self.__user_id = UserId.from_string(user_id)
+    def with_user_id(self, user_id: UserId):
+        self.__user_id = user_id
         return self
 
     def with_email(self, email: str):
         self.__email = email
         return self
+
+    def insert(self) -> User:
+        user = self.build()
+        user_repository = UserMysqlRepository()
+        user_repository.save(user)
+        return user
 
     def build(self) -> User:
         return User(

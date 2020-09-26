@@ -20,8 +20,8 @@ fake = Faker()
 class TestUpdateUser():
 
     def test_user_is_updated(self):
-        str_user_id = str(uuid.uuid4())
-        existing_user = UserBuilder().with_user_id(str_user_id).build()
+        user_id = UserId.from_string(str(uuid.uuid4()))
+        existing_user = UserBuilder().with_user_id(user_id).build()
         user_repository = UserInMemoryRepository()
         user_repository.save(existing_user)
         updated_user_request = {
@@ -33,7 +33,7 @@ class TestUpdateUser():
         }
         update_user_use_case = UpdateUser(user_repository)
 
-        update_user_use_case.run(str_user_id, updated_user_request)
+        update_user_use_case.run(user_id.value, updated_user_request)
 
         updated_user: Optional[User] = user_repository.find(existing_user.user_id)
         assert updated_user.username == updated_user_request["username"]
