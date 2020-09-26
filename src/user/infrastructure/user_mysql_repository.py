@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 import sqlalchemy as db
 
@@ -49,13 +50,14 @@ class UserMysqlRepository(UserRepository):
 
         self.__db_connection.execute(query)
 
-    def getById(self, user_id: UserId):
-        query = db.select([self.__users]).where(
-            self.__users.columns.user_id == user_id.value)
+    def find(self, user_id: UserId) -> Optional[User]:
+        query = db.select([self.__users]).where(self.__users.columns.user_id == user_id.value)
         resultProxy = self.__db_connection.execute(query)
+
         resultSet = resultProxy.fetchall()
         if not resultSet:
             return None
+
         return self.__getUserFromResult(resultSet[0])
 
     def find_by_email(self, email):
