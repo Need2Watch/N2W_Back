@@ -31,10 +31,15 @@ class UserMysqlRepository(UserRepository):
 
         self.__db_connection.execute(query)
 
-    def delete(self, user: User):
-        query = db.delete(self.__users).where(
-            self.__users.columns.user_id == user.user_id.value)
-        self.__db_connection.execute(query)
+    def find(self, user_id: UserId) -> Optional[User]:
+        query = db.select([self.__users]).where(self.__users.columns.user_id == user_id.value)
+        resultProxy = self.__db_connection.execute(query)
+
+        resultSet = resultProxy.fetchall()
+        if not resultSet:
+            return None
+
+        return self.__getUserFromResult(resultSet[0])
 
     def update(self, user: User):
         query = db.update(self.__users).values(
@@ -50,17 +55,7 @@ class UserMysqlRepository(UserRepository):
 
         self.__db_connection.execute(query)
 
-    def find(self, user_id: UserId) -> Optional[User]:
-        query = db.select([self.__users]).where(self.__users.columns.user_id == user_id.value)
-        resultProxy = self.__db_connection.execute(query)
-
-        resultSet = resultProxy.fetchall()
-        if not resultSet:
-            return None
-
-        return self.__getUserFromResult(resultSet[0])
-
-    def find_by_email(self, email):
+    def find_by_email(self, email) -> Optional[User]:
         query = db.select([self.__users]).where(
             self.__users.columns.email == email)
         resultProxy = self.__db_connection.execute(query)
@@ -69,7 +64,11 @@ class UserMysqlRepository(UserRepository):
             return None
         return self.__getUserFromResult(resultSet[0])
 
-    def __getUserFromResult(self, result: tuple):
+    def clean(self):
+        query = db.delete(self.__users)
+        self.__db_connection.execute(query)
+
+    def __getUserFromResult(self, result: tuple) -> User:
         return User(
             user_id=UserId.from_string(result[0]),
             username=result[1],

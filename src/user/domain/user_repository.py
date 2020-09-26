@@ -8,10 +8,10 @@ class UserRepository(ABC):
     def save(self, user: User):
         pass
 
-    def update(self, user: User):
+    def find(self, user_id: UserId) -> User:
         pass
 
-    def find(self, user_id: UserId) -> User:
+    def update(self, user: User):
         pass
 
     def find_by_email(self, user_email: str) -> User:
