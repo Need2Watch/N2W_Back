@@ -93,3 +93,21 @@ class TestUsersPutController():
         assert updated_user.first_name == users_put_request_params["first_name"]
         assert updated_user.last_name == users_put_request_params["last_name"]
         assert updated_user.city == users_put_request_params["city"]
+
+    def test_should_return_404_when_the_user_to_be_updated_does_not_exist(self):
+        non_existing_user_id = str(uuid.uuid4())
+        users_put_request_params = {
+            "username": fake.name(),
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "country": fake.country(),
+            "city": fake.city()
+        }
+
+        response = app.test_client().put(
+            '/users/{0}'.format(non_existing_user_id),
+            data=json.dumps(users_put_request_params),
+            content_type='application/json'
+        )
+
+        assert response.status_code == 404
