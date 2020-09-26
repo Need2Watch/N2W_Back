@@ -12,6 +12,12 @@ class UserInMemoryRepository(UserRepository):
     def save(self, user: User):
         self.__users.append(user)
 
+    def update(self, user_to_update: User):
+        for user in self.__users:
+            if user.user_id.value == user_to_update.user_id.value:
+                self.__users.remove(user)
+        self.__users.append(user_to_update)
+
     def find(self, user_id: UserId) -> Optional[User]:
         for user in self.__users:
             if user.user_id.value == user_id.value:
