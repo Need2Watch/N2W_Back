@@ -1,13 +1,14 @@
 import unittest
 import uuid
+
 from faker import Faker
 
-from ....src.user.infrastructure.user_validator import UserValidator
+from .....src.user.infrastructure.validators.users_post_validator import UsersPostValidator
 
 fake = Faker(['es_ES', 'it_IT'])
 
-class TestUserValidator(unittest.TestCase):
 
+class TestUserValidator(unittest.TestCase):
     def test_correct_case(self):
         user = {
             "user_id": str(uuid.uuid4()),
@@ -20,8 +21,7 @@ class TestUserValidator(unittest.TestCase):
             "email": fake.email(),
         }
 
-        self.assertTrue(UserValidator().validate_user(user))
-
+        self.assertTrue(UsersPostValidator().validate(user))
 
     def test_bad_case_not_completed(self):
         user = {
@@ -32,8 +32,7 @@ class TestUserValidator(unittest.TestCase):
             "email": fake.email(),
         }
 
-        self.assertFalse(UserValidator().validate_user(user))
-
+        self.assertFalse(UsersPostValidator().validate(user))
 
     def test_bad_case_not_correct_type(self):
         user = {
@@ -47,4 +46,4 @@ class TestUserValidator(unittest.TestCase):
             "email": fake.email(),
         }
 
-        self.assertFalse(UserValidator().validate_user(user))
+        self.assertFalse(UsersPostValidator().validate(user))
