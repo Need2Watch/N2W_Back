@@ -1,19 +1,21 @@
-import unittest
-from passlib.hash import sha256_crypt
+from faker import Faker
+
 from ....src.user.domain.password import Password
 
+fake = Faker()
 
-class TestPassword(unittest.TestCase):
 
-    def test_constructor(self):
-        password = Password(sha256_crypt.hash("password"))
-        self.assertTrue(sha256_crypt.verify("password", password.value))
+class TestPassword():
+    def test_password_is_not_exposed(self):
+        str_password = fake.password()
 
-    def test_from_string(self):
-        password = Password.from_string("password")
-        self.assertTrue(sha256_crypt.verify("password", password.value))
+        password = Password.from_string(str_password)
 
-    def test_if_can_verify(self):
-        password = Password.from_string("password")
-        self.assertTrue(password.verify("password"))
-        self.assertFalse(password.verify("notPassword"))
+        assert password.value != str_password
+
+    def test_password_can_be_verified(self):
+        str_password = fake.password()
+
+        password = Password.from_string(str_password)
+
+        assert password.verify(str_password) == True

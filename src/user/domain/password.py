@@ -15,5 +15,5 @@ class Password():
     def value(self):
         return self.__value
 
-    def verify(self, password: str):
+    def verify(self, password: str) -> bool:
         return sha256_crypt.verify(password, self.__value)
