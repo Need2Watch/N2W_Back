@@ -1,4 +1,4 @@
-from ..domain.no_existing_user_with_id_error import NoExistingUserWithIdError
+from ..domain.non_existing_user_with_id_error import NonExistingUserWithIdError
 from ..domain.user import User
 from ..domain.user_id import UserId
 from ..domain.user_repository import UserRepository
@@ -13,7 +13,7 @@ class UpdateUser():
         user = self.__user_repository.find(user_id)
 
         if not user:
-            raise(NoExistingUserWithIdError(user_id))
+            raise(NonExistingUserWithIdError(user_id))
 
         updated_user = User(
             user.user_id,

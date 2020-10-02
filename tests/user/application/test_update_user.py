@@ -5,13 +5,10 @@ import pytest
 from faker import Faker
 
 from ....src.user.application.update_user import UpdateUser
-from ....src.user.application.user_dto import UserDTO
-from ....src.user.domain.no_existing_user_with_id_error import \
-    NoExistingUserWithIdError
+from ....src.user.domain.non_existing_user_with_id_error import NonExistingUserWithIdError
 from ....src.user.domain.user import User
 from ....src.user.domain.user_id import UserId
-from ....tests.user.infrastructure.user_in_memory_repository import \
-    UserInMemoryRepository
+from ....tests.user.infrastructure.user_in_memory_repository import UserInMemoryRepository
 from ..builder.user_builder import UserBuilder
 
 fake = Faker()
@@ -55,5 +52,5 @@ class TestUpdateUser():
         user_repository = UserInMemoryRepository()
         update_user_use_case = UpdateUser(user_repository)
 
-        with pytest.raises(NoExistingUserWithIdError):
+        with pytest.raises(NonExistingUserWithIdError):
             update_user_use_case.run(non_existing_user_id, updated_user_request)

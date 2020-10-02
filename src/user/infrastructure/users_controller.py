@@ -3,7 +3,7 @@ from flask import Blueprint, abort, jsonify, request
 from ..application.create_user import CreateUser
 from ..application.update_user import UpdateUser
 from ..domain.already_existing_user_error import AlreadyExistingUserError
-from ..domain.no_existing_user_with_id_error import NoExistingUserWithIdError
+from ..domain.non_existing_user_with_id_error import NonExistingUserWithIdError
 from .from_user_to_dict import FromUserToDict
 from .login_validator import LoginValidator
 from .user_mysql_repository import UserMysqlRepository
@@ -41,7 +41,7 @@ def user_update(user_id: str):
     try:
         UpdateUser(user_repository).run(user_id, request.json)
     except Exception as error:
-        if isinstance(error, NoExistingUserWithIdError):
+        if isinstance(error, NonExistingUserWithIdError):
             abort(404)
         else:
             abort(500)

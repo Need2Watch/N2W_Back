@@ -5,7 +5,6 @@ from typing import Optional
 from faker import Faker
 
 from ....n2w import app
-from ....src.user.domain.user import User
 from ....src.user.domain.user_id import UserId
 from ....src.user.infrastructure.user_mysql_repository import UserMysqlRepository
 from ..builder.user_builder import UserBuilder
