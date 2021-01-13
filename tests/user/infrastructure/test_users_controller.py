@@ -1,6 +1,5 @@
 import json
 import uuid
-from typing import Optional
 
 from faker import Faker
 
