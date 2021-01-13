@@ -27,9 +27,9 @@ The backend of this application consist in an API REST.
    > If you get any errors in this step, check that all the dependencies are installed on your system.
 1. Run `docker-compose up -d`
    > If you get an error saying that the port for the container is already been used, you may stop the mysql service. In most Linux distributions you can do it with `sudo systemctl stop mysql.service`.
-1. Create a .env.test file from [env.test.dist](https://github.com/Need2Watch/N2W_Back/blob/master/.env.test.dist) and an .env file from [env.dist](https://github.com/Need2Watch/N2W_Back/blob/master/.env.dist) file and set the environment variables. You should get `MOVIE_API_KEY` from [TMDB](https://www.themoviedb.org/settings/api)
-   > It is important that in your `env.test` the `DB_ENGINE` is the same `DB_ENGINE_TEST` that you have in your `.env` file
+1. Create an .env file from [env.dist](https://github.com/Need2Watch/N2W_Back/blob/master/.env.dist) file and set the environment variables. You should get `MOVIE_API_KEY` from [TMDB](https://www.themoviedb.org/settings/api)
 1. Run `python init_dbs.py`
+1. Check everything is ok running the test with `pytest`.
 1. Run `flask run`
 1. Access to `http://127.0.0.1:5000` and you will see the Swagger UI with all the API methods and you can test them.
 
