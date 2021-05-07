@@ -14,7 +14,7 @@ distlib==0.3.0
 distro==1.4.0
 Faker==4.1.0
 Flask==1.1.2
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 flask-swagger-ui==3.25.0
 html5lib==1.0.1
 idna==2.9
