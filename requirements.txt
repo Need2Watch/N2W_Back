@@ -23,7 +23,7 @@ iniconfig==1.0.1
 ipaddr==2.2.0
 isort==5.4.2
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jsonschema==3.2.0
 lazy-object-proxy==1.4.3
 lockfile==0.12.2
